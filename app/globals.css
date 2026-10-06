@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+/* ---------- design tokens ---------- */
+@theme {
+  --color-bg: #07090d;
+  --color-bg-2: #090c11;
+  --color-hero: #0b1411;
+  --color-card: #0b0e14;
+  --color-card-2: #0d1118;
+  --color-line: #161b26;
+  --color-line-2: #1c2330;
+  --color-line-3: #2a3344;
+  --color-ink: #f2f5fa;
+  --color-ink-2: #c9d0dc;
+  --color-muted: #a7b0c0;
+  --color-dim: #8a93a5;
+  --color-faint: #6b7588;
+  --color-accent: #7cf5c4;
+  --color-orange: #ff9b5c;
+  --color-violet: #8b9cff;
+  --color-yellow: #f2e86d;
+
+  --font-sans: "Manrope", system-ui, sans-serif;
+  --font-display: "Syne", system-ui, sans-serif;
+  --font-hero: "Plus Jakarta Sans", "Manrope", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-script: "Caveat", cursive;
+  --font-card: "Archivo", "Arial Narrow", sans-serif;
+}
+
+/* base element styles live in the base layer so Tailwind utilities can override them */
+@layer base {
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+  background: var(--color-bg);
+}
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+::selection {
+  background: var(--color-accent);
+  color: #07090d;
+}
+}
+
+/* ---------- keyframes ---------- */
+@keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
+@keyframes blink { 0%,49% { opacity: 1 } 50%,100% { opacity: 0 } }
+@keyframes pulse-dot { 0%,100% { box-shadow: 0 0 0 0 rgba(124,245,196,.5) } 50% { box-shadow: 0 0 0 6px rgba(124,245,196,0) } }
+@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+@keyframes line-in { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
+
+.floaty { animation: floaty 6s ease-in-out infinite }
+.caret { animation: blink 1s step-end infinite }
+.dot { animation: pulse-dot 2s ease-in-out infinite }
+.marquee { animation: marquee 38s linear infinite }
+.type-line { opacity: 0; animation: line-in .4s ease-out forwards }
+
+/* hover-tilt cards */
+.tilt { transition: transform .5s cubic-bezier(.2,.8,.2,1), border-color .3s }
+.tilt:hover { transform: perspective(900px) rotateX(5deg) rotateY(-7deg) translateZ(16px); border-color: var(--color-accent) }
+
+
+/* live-site browser mockups */
+.browser3d { transition: transform .7s cubic-bezier(.2,.8,.2,1) }
+.site-row:hover .browser3d { transform: perspective(1600px) rotateX(2deg) rotateY(0deg) translateZ(30px) !important }
+
+.cat { transition: transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s }
+.cat:hover { transform: translateY(-6px); border-color: #2e3a4e }
+
+@media (prefers-reduced-motion: reduce) {
+  .floaty, .caret, .dot, .marquee { animation: none }
+  .type-line { animation: none; opacity: 1 }
+  html { scroll-behavior: auto }
+}
+
+/* ---------- bracket cursor ---------- */
+html.bracket-cursor, html.bracket-cursor * { cursor: none !important; }
+.bc-layer { position: fixed; inset: 0; z-index: 9999; pointer-events: none; mix-blend-mode: difference; opacity: 0; transition: opacity .2s; }
+html.bracket-cursor-on .bc-layer { opacity: 1; }
+.bc-pos { position: fixed; left: 0; top: 0; will-change: transform; }
+.bc-dot { position: absolute; left: -2.5px; top: -2.5px; width: 5px; height: 5px; border-radius: 50%; background: #fff; }
+.bc-ring { position: absolute; left: -20px; top: -20px; width: 40px; height: 40px; animation: bc-spin 4s linear infinite; transition: scale .25s ease; }
+.bc-pos[data-hover="1"] .bc-ring { scale: 1.45; }
+.bc-pos[data-down="1"] .bc-ring { scale: .8; }
+.bc-corner { position: absolute; width: 11px; height: 11px; border: 0 solid #fff; }
+.bc-tl { left: 0; top: 0; border-left-width: 2px; border-top-width: 2px; }
+.bc-tr { right: 0; top: 0; border-right-width: 2px; border-top-width: 2px; }
+.bc-bl { left: 0; bottom: 0; border-left-width: 2px; border-bottom-width: 2px; }
+.bc-br { right: 0; bottom: 0; border-right-width: 2px; border-bottom-width: 2px; }
+@keyframes bc-spin { to { transform: rotate(360deg) } }
+@media (prefers-reduced-motion: reduce) { .bc-ring { animation: none; } }
