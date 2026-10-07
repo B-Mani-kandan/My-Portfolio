@@ -1,4 +1,9 @@
+"use client";
+
+import { ArrowRight, Briefcase, Download, GraduationCap, MapPin } from "lucide-react";
 import { IDCardLanyard } from "@/components/ui/id-card-lanyard";
+import { Eyebrow } from "@/components/sections/services";
+import { Highlighted, Reveal, useInView } from "@/components/ui/reveal";
 import { profile } from "@/lib/data";
 
 export function About() {
@@ -31,37 +36,117 @@ export function About() {
         </div>
 
         <div className="flex min-w-0 flex-[1_1_520px] flex-col gap-7 pt-[110px]">
-          <span className="font-mono text-[13px] text-accent">01 / about</span>
-          <h2 className="font-display text-[clamp(36px,4.4vw,56px)] font-bold leading-[1.05] tracking-[-0.02em]">
-            Code is my craft.
-            <br />
-            Problems are my playground.
-          </h2>
-          <p className="text-lg leading-[1.75] text-muted">{profile.about}</p>
+          <Eyebrow num="01" label="About me" />
+          <Headline />
 
-          <EditorCard />
+          <Reveal delay={150}>
+            <p className="text-[clamp(20px,1.75vw,25px)] font-medium leading-[1.55] tracking-[-0.01em] text-ink">
+              <Highlighted text={profile.aboutLead} />
+            </p>
+          </Reveal>
+          {profile.aboutBody.map((para, i) => (
+            <Reveal key={i} delay={250 + i * 120}>
+              <p className="text-[17px] leading-[1.8] text-muted">
+                <Highlighted text={para} />
+              </p>
+            </Reveal>
+          ))}
 
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3.5">
-            <div className="tilt flex flex-col gap-2 rounded-2xl border border-line-2 bg-card p-[22px]">
-              <span className="font-mono text-xs text-faint">{"// focus"}</span>
-              <b className="text-[17px]">Enterprise web apps</b>
-              <span className="text-sm leading-[1.55] text-dim">Logistics, freight &amp; HR systems that teams use all day.</span>
-            </div>
-            <div className="tilt flex flex-col gap-2 rounded-2xl border border-line-2 bg-card p-[22px]">
-              <span className="font-mono text-xs text-faint">{"// education"}</span>
-              <b className="text-[17px]">{profile.education.degree}</b>
-              <span className="text-sm leading-[1.55] text-dim">
-                {profile.education.school} · CGPA {profile.education.cgpa}
+          {/* quick facts */}
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-3.5">
+            <Fact delay={0} icon={<Briefcase size={17} />} label="Currently">
+              <b className="text-[16px]">{profile.currently.role}</b>
+              <span className="text-sm text-dim">
+                {profile.currently.company} · since {profile.currently.since}
               </span>
-            </div>
+            </Fact>
+            <Fact delay={120} icon={<GraduationCap size={18} />} label="Education">
+              <b className="text-[16px]">{profile.education.degree}</b>
+              <span className="text-sm text-dim">CGPA {profile.education.cgpa}</span>
+            </Fact>
+            <Fact delay={240} icon={<MapPin size={17} />} label="Based in">
+              <b className="text-[16px]">{profile.location}</b>
+              <span className="text-sm text-dim">Open to remote &amp; on-site</span>
+            </Fact>
           </div>
+
+          <Reveal delay={100}>
+            <EditorCard />
+          </Reveal>
+
+          <Reveal delay={150} className="flex flex-wrap gap-3">
+            <a
+              href="#contact"
+              className="group inline-flex min-h-12 items-center gap-2.5 rounded-full bg-accent px-6 text-[15px] font-bold text-bg transition hover:brightness-110"
+            >
+              Let&apos;s work together
+              <ArrowRight size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+            <a
+              href={profile.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center gap-2.5 rounded-full border border-line-3 px-6 text-[15px] font-semibold text-ink-2 transition hover:border-accent hover:text-accent"
+            >
+              <Download size={16} /> Download résumé
+            </a>
+          </Reveal>
         </div>
       </div>
     </section>
   );
 }
 
+/** The heading rises in word by word; "playground" gets the accent gradient. */
+function Headline() {
+  const [ref, inView] = useInView<HTMLHeadingElement>(0.4);
+  const lines = [
+    ["Code", "is", "my", "craft."],
+    ["Problems", "are", "my", "playground."],
+  ];
+  let n = 0;
+  return (
+    <h2 ref={ref} className="font-display text-[clamp(36px,4.4vw,56px)] font-bold leading-[1.08] tracking-[-0.02em]">
+      {lines.map((words, li) => (
+        <span key={li} className="block">
+          {words.map((w) => {
+            const i = n++;
+            const accent = w === "playground.";
+            return (
+              <span key={w} className="mr-[0.25em] inline-block overflow-hidden pb-[0.08em] align-bottom last:mr-0">
+                <span
+                  className={`inline-block transition-transform duration-[900ms] ease-[cubic-bezier(.2,.8,.2,1)] ${
+                    accent ? "bg-[linear-gradient(90deg,var(--color-accent),var(--color-violet))] bg-clip-text text-transparent" : ""
+                  }`}
+                  style={{ transform: inView ? "translateY(0)" : "translateY(110%)", transitionDelay: `${i * 70}ms` }}
+                >
+                  {w}
+                </span>
+              </span>
+            );
+          })}
+        </span>
+      ))}
+    </h2>
+  );
+}
+
+function Fact({ icon, label, delay, children }: { icon: React.ReactNode; label: string; delay: number; children: React.ReactNode }) {
+  return (
+    <Reveal delay={delay}>
+      <div className="tilt flex h-full flex-col gap-2 rounded-2xl border border-line-2 bg-card p-[22px]">
+        <span className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-faint">
+          <span className="text-accent">{icon}</span>
+          {label}
+        </span>
+        {children}
+      </div>
+    </Reveal>
+  );
+}
+
 function EditorCard() {
+  const [ref, inView] = useInView<HTMLDivElement>(0.3);
   const kw = "text-[#B9A6FF]";
   const ty = "text-[#7CD8F5]";
   const st = "text-accent";
@@ -79,7 +164,7 @@ function EditorCard() {
     <>{"}"}<span className="caret text-accent">▍</span></>,
   ];
   return (
-    <div className="overflow-hidden rounded-2xl border border-line-2 bg-card shadow-[0_30px_60px_-30px_rgba(0,0,0,.8)]">
+    <div ref={ref} className="overflow-hidden rounded-2xl border border-line-2 bg-card shadow-[0_30px_60px_-30px_rgba(0,0,0,.8)]">
       <div className="flex items-stretch border-b border-line-2 bg-bg-2 font-mono text-xs">
         <span className="flex items-center gap-1.5 px-3.5">
           <i className="h-[9px] w-[9px] rounded-full bg-[#FF6B6B]" />
@@ -96,8 +181,11 @@ function EditorCard() {
           ))}
         </div>
         <div className="whitespace-pre pr-4 text-ink-2">
+          {/* lines type in one after another once the card is on screen */}
           {code.map((l, i) => (
-            <div key={i}>{l}</div>
+            <div key={i} className={inView ? "type-line" : "opacity-0"} style={{ animationDelay: `${0.2 + i * 0.18}s` }}>
+              {l}
+            </div>
           ))}
         </div>
       </div>

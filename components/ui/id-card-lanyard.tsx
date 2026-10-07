@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 /*
  * IDCardLanyard — a draggable ID card hanging from a physics-simulated lanyard.
@@ -130,7 +130,6 @@ const CSS = `
 .idcl-hint{ position:fixed; top:16px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:6px; background:rgba(10,12,16,.72); color:#f3f0e9; padding:7px 14px; border-radius:999px;
   font-family:var(--idcl-font-mono); font-size:11px; pointer-events:none; opacity:1; transition:opacity .4s ease; white-space:nowrap; }
 .idcl-root.idcl-contained .idcl-hint{ position:absolute; top:auto; bottom:8px; }
-.idcl-hint.idcl-hint-hidden{ opacity:0; }
 .idcl-hint svg{ width:13px; height:13px; opacity:.75; flex-shrink:0; }
 `;
 
@@ -166,7 +165,6 @@ export function IDCardLanyard({
   const barcodeRef = useRef<HTMLDivElement>(null);
   const qrBackRef = useRef<HTMLDivElement>(null);
   const qrFrontRef = useRef<HTMLDivElement>(null);
-  const [interacted, setInteracted] = useState(false);
 
   // Fonts (Archivo, JetBrains Mono, Caveat) are self-hosted in app/layout.tsx.
 
@@ -268,7 +266,18 @@ export function IDCardLanyard({
       p.y = Math.max(anchor.y + 20, Math.min(sceneH - 30, p.y));
       return p;
     }
+    // idle sway: a soft "breeze" pushing the card side to side on a slow cycle,
+    // well below the rope's own swing rate so it drifts instead of bouncing
+    const SWAY_FORCE = 0.05;
+    const SWAY_PERIOD = 360; // frames (~6s at 60fps)
+    const swayOn = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let tick = 0;
+
     function updatePoints() {
+      tick++;
+      const w = (tick / SWAY_PERIOD) * Math.PI * 2;
+      // a second, slower wave keeps the swing from looking mechanical
+      const sway = swayOn && !dragging ? SWAY_FORCE * (Math.sin(w) + 0.35 * Math.sin(w * 0.43 + 1.3)) : 0;
       for (let i = 1; i < points.length; i++) {
         if (dragging && i === points.length - 1) continue;
         const p = points[i];
@@ -276,7 +285,7 @@ export function IDCardLanyard({
         const vy = (p.y - p.oldy) * FRICTION;
         p.oldx = p.x;
         p.oldy = p.y;
-        p.x += vx;
+        p.x += vx + sway * (i / (points.length - 1));
         p.y += vy + GRAVITY;
       }
     }
@@ -422,7 +431,6 @@ export function IDCardLanyard({
       if ((e.target as HTMLElement).closest("a")) return;
       e.preventDefault();
       dragging = true;
-      setInteracted(true);
       card!.setPointerCapture(e.pointerId);
       const pos = clampToScene(getScenePos(e));
       pointer = pos;
@@ -462,7 +470,6 @@ export function IDCardLanyard({
         e.preventDefault();
         flipped = !flipped;
         flipTarget = flipped ? 180 : 0;
-        setInteracted(true);
       }
     };
 
@@ -610,7 +617,7 @@ export function IDCardLanyard({
         </div>
 
         {showHint && (
-          <div className={`idcl-hint ${interacted ? "idcl-hint-hidden" : ""}`}>
+          <div className="idcl-hint">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M12 3v18M7 8l-4 4 4 4M17 8l4 4-4 4" />
             </svg>

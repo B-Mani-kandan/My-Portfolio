@@ -15,8 +15,14 @@ export const profile = {
   resume: "/Manikandan_B_Resume.pdf",
   heroIntro:
     "I build enterprise web apps, clean APIs and fast business websites with ASP.NET, Angular and React — software people actually enjoy using.",
-  about:
-    "I'm a results-driven developer who enjoys the whole stack — designing RESTful APIs and business logic in ASP.NET and C#, shaping optimised SQL Server schemas and stored procedures, and building responsive interfaces in Angular and React. By day I ship logistics and HR platforms at Invoking Systems; on the side I build fast, good-looking websites for real businesses.",
+  // About section — wrap a phrase in **double stars** to give it the animated highlight
+  aboutLead:
+    "I'm Manikandan — a full-stack developer from Tamil Nadu who turns **messy business workflows** into software that feels fast, clear and dependable.",
+  aboutBody: [
+    "Since 2024 I've been building **logistics, freight and HR platforms** at Invoking Systems — ASP.NET and C# APIs, SQL Server underneath, Angular and React on top. Real teams run their day on what I ship.",
+    "Outside the day job I design and launch websites for real businesses — **three are live today**. I care about the details people feel: quick pages, honest code and screens that just make sense.",
+  ],
+  currently: { role: "Software Developer", company: "Invoking Systems", since: "Jan 2024" },
   education: {
     degree: "B.Tech, Information Technology",
     school: "Anjalai Ammal Mahalingam Engineering College",
@@ -31,7 +37,7 @@ export const stats = [
   { value: "8.25", label: "B.Tech IT CGPA" },
 ];
 
-export const marquee = ["ASP.NET", "C#", "Angular", "React", "SQL Server", "Web API", "Node.js", "MongoDB", "Logistics", "Freight systems"];
+export const marquee = ["ASP.NET", "C#", "Angular", "React", "Node.js", "Express.js", "SQL Server", "MongoDB", "TypeScript", "Tailwind CSS", "Firebase", "Java"];
 
 export const COLORS = {
   accent: "#7CF5C4",
@@ -51,28 +57,28 @@ export const services: Service[] = [
     lead: "Business systems that run real operations — shipments, billing and people — built in ASP.NET and C# every day at Invoking Systems.",
     builds: ["Logistics & freight forwarding modules", "HR and attendance platforms", "Role-based dashboards and approval workflows"],
     detail: "A layered ASP.NET + C# architecture with role-based auth, Angular on the front and SQL Server underneath — shaped so a new module plugs in without rewriting the old ones.",
-    tech: ["ASP.NET", "C#", "Angular", "SQL Server"],
+    tech: ["ASP.NET", "C#", "Angular", "SQL Server", "Visual Studio"],
   },
   {
     num: "02", title: "APIs That Hold It Together", badge: "Core skill", color: COLORS.accent,
     lead: "Clean, predictable REST APIs that connect front ends, databases and partner systems — so data flows end to end without surprises.",
     builds: ["RESTful services with ASP.NET Web API", "Third-party and partner integrations", "Endpoints documented and tested in Postman"],
     detail: "Consistent DTOs, validation and error responses, async data access and stored procedures tuned for the heavy queries — so the UI team always knows exactly what comes back.",
-    tech: ["Web API", "Node.js", "Express", "T-SQL", "Postman"],
+    tech: ["Web API", "Node.js", "Express.js", "MongoDB", "SQL Server", "Postman"],
   },
   {
     num: "03", title: "Interfaces People Enjoy", badge: "Angular & React", color: COLORS.violet,
     lead: "Responsive screens that turn complicated workflows into a few clear clicks — on a desktop at the office or a phone on the dock.",
     builds: ["Reusable component libraries", "Data-heavy forms, tables and dashboards", "Pixel-tidy layouts on every screen size"],
     detail: "Typed Angular and React components with shared services and hooks, lazy-loaded routes and careful state handling — the second screen costs less than the first.",
-    tech: ["Angular", "React", "TypeScript", "Bootstrap"],
+    tech: ["Angular", "React", "TypeScript", "JavaScript", "Tailwind CSS", "Bootstrap"],
   },
   {
     num: "04", title: "Websites That Win Clients", badge: "3 live sites", color: COLORS.yellow,
     lead: "Fast, SEO-ready business websites that bring in enquiries — already live for freight and logistics companies.",
     builds: ["Service and landing pages that convert", "Enquiry and quote forms", "SEO, social previews and deployment"],
     detail: "Mobile-first builds with semantic HTML, Open Graph and Twitter cards, optimised images and quick hosting — handed over live and kept maintained.",
-    tech: ["React", "HTML / CSS", "SEO", "Vercel"],
+    tech: ["React", "HTML5", "CSS3", "Tailwind CSS", "Figma", "Firebase", "Vercel"],
   },
 ];
 
@@ -84,18 +90,53 @@ export const buildSteps = [
   { num: "05", title: "Ship & tune", body: "Review, cross-browser test and deploy, then profile slow queries and pages and make them fast." },
 ];
 
-export const sphereSkills: { name: string; color: string }[] = [
-  ...["C#", "ASP.NET", "Web API", "Node.js", "Spring Boot", "Java"].map((name) => ({ name, color: COLORS.orange })),
-  ...["Angular", "React.js", "JavaScript", "TypeScript", "HTML5", "CSS3", "Bootstrap"].map((name) => ({ name, color: COLORS.accent })),
-  ...["SQL Server", "MySQL", "MongoDB", "T-SQL"].map((name) => ({ name, color: COLORS.violet })),
-  ...["Git", "Postman", "Visual Studio", "VS Code", "Vercel"].map((name) => ({ name, color: COLORS.yellow })),
-];
+export const techCategories = [
+  { id: "lang", label: "Languages", color: COLORS.orange },
+  { id: "front", label: "Frontend", color: COLORS.accent },
+  { id: "back", label: "Backend", color: COLORS.violet },
+  { id: "data", label: "Databases", color: COLORS.yellow },
+  { id: "tools", label: "Tools", color: "#7CD8F5" },
+] as const;
 
-export const skillCategories = [
-  { glyph: "{ }", title: "Backend", color: COLORS.orange, note: "APIs, business logic, auth", items: ["C#", "ASP.NET", "ASP.NET Web API", "Node.js", "Spring Boot"] },
-  { glyph: "</>", title: "Frontend", color: COLORS.accent, note: "Responsive, fast interfaces", items: ["Angular", "React.js", "JavaScript", "HTML / CSS", "Bootstrap"] },
-  { glyph: "db", title: "Data", color: COLORS.violet, note: "Schemas, procs, tuning", items: ["SQL Server", "MySQL", "MongoDB", "Stored procedures"] },
-  { glyph: ">_", title: "Tools", color: COLORS.yellow, note: "Ship it, test it, deploy it", items: ["Git", "Postman", "Visual Studio", "VS Code", "Vercel"] },
+export type TechCategory = (typeof techCategories)[number]["id"];
+
+/**
+ * Tech stack tiles, in display order. On wide screens they're laid out in rows of
+ * 10 / 8 / 6 / 4 (a funnel), so keep the total at 28 or update STACK_ROWS in stack.tsx.
+ * `icon` is a file in /public/tech; `invert` flips a black logo to white for the dark page.
+ */
+export const techStack: { name: string; icon: string; cat: TechCategory; invert?: boolean }[] = [
+  { name: "C", icon: "c", cat: "lang" },
+  { name: "C++", icon: "cplusplus", cat: "lang" },
+  { name: "Java", icon: "java", cat: "lang" },
+  { name: "C#", icon: "csharp", cat: "lang" },
+  { name: "JavaScript", icon: "javascript", cat: "lang" },
+  { name: "TypeScript", icon: "typescript", cat: "lang" },
+  { name: "HTML5", icon: "html5", cat: "front" },
+  { name: "CSS3", icon: "css3", cat: "front" },
+  { name: "Tailwind CSS", icon: "tailwindcss", cat: "front" },
+  { name: "Bootstrap", icon: "bootstrap", cat: "front" },
+
+  { name: "Angular", icon: "angular", cat: "front" },
+  { name: "React", icon: "react", cat: "front" },
+  { name: "ASP.NET", icon: "dotnetcore", cat: "back" },
+  { name: "Web API", icon: "openapi", cat: "back" },
+  { name: "Node.js", icon: "nodejs", cat: "back" },
+  { name: "Express.js", icon: "express", cat: "back", invert: true },
+  { name: "Spring Boot", icon: "spring", cat: "back" },
+  { name: "SQL Server", icon: "microsoftsqlserver", cat: "data" },
+
+  { name: "MySQL", icon: "mysql", cat: "data" },
+  { name: "MongoDB", icon: "mongodb", cat: "data" },
+  { name: "Firebase", icon: "firebase", cat: "data" },
+  { name: "Git", icon: "git", cat: "tools" },
+  { name: "GitHub", icon: "github", cat: "tools", invert: true },
+  { name: "Postman", icon: "postman", cat: "tools" },
+
+  { name: "VS Code", icon: "vscode", cat: "tools" },
+  { name: "Visual Studio", icon: "visualstudio", cat: "tools" },
+  { name: "Figma", icon: "figma", cat: "tools" },
+  { name: "Vercel", icon: "vercel", cat: "tools", invert: true },
 ];
 
 export type LiveSite = {
@@ -190,3 +231,14 @@ export const gitLog = [
 ];
 
 export const contactTopics = ["Full-time role", "Business website", "Freelance project", "Just saying hi"];
+
+/** Sections that have their own URL (/about, /work…). The nav links come from here too. */
+export const sections = [
+  { id: "about", label: "About" },
+  { id: "services", label: "Services" },
+  { id: "skills", label: "Stack" },
+  { id: "work", label: "Work" },
+  { id: "process", label: "Process" },
+  { id: "experience", label: "Experience" },
+  { id: "contact", label: "Contact" },
+];

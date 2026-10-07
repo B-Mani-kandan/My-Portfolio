@@ -7,6 +7,9 @@ import { contactTopics, profile } from "@/lib/data";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
+// Web3Forms access key — public by design: it can only deliver messages to your own inbox.
+const WEB3FORMS_KEY = "d4348448-5612-407e-a3ba-08d929876e1a";
+
 const field =
   "min-h-12 rounded-xl border border-[#222A38] bg-card-2 px-4 py-3.5 text-[15px] font-medium text-ink outline-none transition placeholder:text-faint focus:border-accent focus:bg-[#0F141D]";
 
@@ -19,22 +22,21 @@ export function Contact() {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
+    const name = String(data.get("name") ?? "").trim();
+    data.append("access_key", WEB3FORMS_KEY);
+    data.append("topic", topic);
+    data.append("subject", `Portfolio: ${topic} — ${name}`);
+    data.append("from_name", "Manikandan B Portfolio");
     setStatus("sending");
     setError("");
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.get("name"),
-          email: data.get("email"),
-          message: data.get("message"),
-          company: data.get("company"), // honeypot — humans leave this empty
-          topic,
-        }),
+        headers: { Accept: "application/json" },
+        body: data,
       });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || "Something went wrong. Please try again.");
+      if (!res.ok || !json.success) throw new Error(json.message || "Something went wrong. Please try again.");
       form.reset();
       setStatus("sent");
     } catch (err) {
@@ -93,7 +95,7 @@ export function Contact() {
               <span className="text-accent">live</span>
             </div>
             <pre className="m-0 overflow-x-auto px-4 py-3.5 font-mono text-[12.5px] leading-[1.8] text-ink-2">
-              <span className="text-orange">POST</span> /api/contact{"\n"}
+              <span className="text-orange">POST</span> api.web3forms.com/submit{"\n"}
               {"{\n"}
               {"  "}<span className="text-[#7CD8F5]">&quot;to&quot;</span>: <span className="text-accent">&quot;{profile.email}&quot;</span>,{"\n"}
               {"  "}<span className="text-[#7CD8F5]">&quot;topic&quot;</span>: <span className="text-accent">&quot;{topic}&quot;</span>,{"\n"}
@@ -135,8 +137,8 @@ export function Contact() {
                   </label>
                 </div>
 
-                {/* honeypot: hidden from people, bots fill it in */}
-                <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+                {/* honeypot: hidden from people, bots tick it — Web3Forms drops those */}
+                <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
                 <fieldset className="flex flex-col gap-2.5">
                   <legend className="mb-2 text-[13px] font-semibold text-muted">I&apos;m reaching out about</legend>
@@ -221,7 +223,7 @@ function Social({ href, label, icon }: { href: string; label: string; icon?: Rea
   );
 }
 
-function GithubIcon() {
+export function GithubIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
@@ -229,7 +231,7 @@ function GithubIcon() {
   );
 }
 
-function LinkedinIcon() {
+export function LinkedinIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />

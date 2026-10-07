@@ -18,24 +18,17 @@ npm start
 
 Requires Node.js 18.18+ (20 or 22 recommended).
 
-## Make the contact form send email
+## Contact form
 
-The form posts to `/api/contact`, which sends through [Resend](https://resend.com) (free tier is plenty).
-
-1. Create a Resend account → **API Keys** → create a key.
-2. Copy `.env.example` to `.env.local` and paste the key into `RESEND_API_KEY`.
-3. Restart `npm run dev`.
-
-Until you verify your own domain in Resend, keep `CONTACT_FROM_EMAIL=Portfolio <onboarding@resend.dev>`.
-That test sender only delivers to the email you signed up to Resend with — so sign up with
-`baskarmanikandan48@gmail.com`. Without a key, the form shows a friendly error and offers your email address.
+The form sends straight from the browser to [Web3Forms](https://web3forms.com), which emails each message
+to the inbox the access key was created with. The key lives in `components/sections/contact.tsx`
+(`WEB3FORMS_KEY`) — it's public by design, so no server or environment variables are needed.
 
 ## Deploy (Vercel)
 
 1. Push this folder to a GitHub repo.
 2. Import it at vercel.com → New Project (framework: Next.js, no settings to change).
-3. Add the three environment variables from `.env.example` under **Settings → Environment Variables**.
-4. Deploy.
+3. Deploy.
 
 ## Where things are
 
@@ -47,7 +40,7 @@ That test sender only delivers to the email you signed up to Resend with — so 
 | Hero + head tracking | `components/sections/hero.tsx`, `components/ui/head-tracker.tsx` |
 | Lanyard ID card | `components/ui/id-card-lanyard.tsx` (used in `components/sections/about.tsx`) |
 | 3D skill sphere / globe / wave | `components/three/*` |
-| Contact form + API | `components/sections/contact.tsx`, `app/api/contact/route.ts` |
+| Contact form (Web3Forms) | `components/sections/contact.tsx` |
 | Résumé PDF, photo | `public/Manikandan_B_Resume.pdf`, `public/me.jpg` |
 
 ### Swapping the hero video frames

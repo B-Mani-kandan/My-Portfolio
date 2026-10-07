@@ -26,31 +26,41 @@ export function Process() {
     const desktop = window.matchMedia("(min-width: 768px)");
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
+    let target = 0;
+    let shown = still ? 1 : 0;
 
-    const update = () => {
-      raf = 0;
+    // where the scroll says the line should be, 0–1
+    const measure = () => {
+      if (still) return 1;
       const vh = window.innerHeight;
       let p: number;
-      if (still) {
-        p = 1;
-      } else if (desktop.matches) {
-        // progress through the pinned scroll distance; the last 15% holds the finished line
+      if (desktop.matches) {
+        // pinned distance: first 8% holds the empty line, last 20% holds the finished one
         const r = section.getBoundingClientRect();
-        p = -r.top / ((r.height - vh) * 0.85);
+        p = (-r.top / (r.height - vh) - 0.08) / 0.72;
       } else {
         const r = list.getBoundingClientRect();
         p = (vh * 0.7 - r.top) / r.height;
       }
-      p = Math.min(1, Math.max(0, p));
-      list.style.setProperty("--p", String(p));
-      // a step lights up once the line has reached its dot
-      setReached(p <= 0 ? -1 : Math.min(LAST, Math.floor(p * LAST + 0.02)));
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
+      return Math.min(1, Math.max(0, p));
     };
 
-    update();
+    // the line eases toward the scroll position, so a fast flick still draws smoothly
+    const frame = () => {
+      raf = 0;
+      shown += (target - shown) * 0.08;
+      if (Math.abs(target - shown) < 0.001) shown = target;
+      list.style.setProperty("--p", String(shown));
+      // a step lights up once the line has reached its dot
+      setReached(shown <= 0.002 ? -1 : Math.min(LAST, Math.floor(shown * LAST + 0.02)));
+      if (shown !== target) raf = requestAnimationFrame(frame);
+    };
+    const onScroll = () => {
+      target = measure();
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
@@ -61,7 +71,7 @@ export function Process() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="process" className="relative overflow-x-clip border-t border-line bg-bg font-hero md:h-[280svh]">
+    <section ref={sectionRef} id="process" className="relative overflow-x-clip border-t border-line bg-bg font-hero md:h-[480svh]">
       <div className="mx-auto flex max-w-[1280px] flex-col justify-center px-6 py-[120px] md:sticky md:top-[72px] md:h-[calc(100svh_-_72px)] md:py-0">
         {/* soft accent glow, top right */}
         <div
