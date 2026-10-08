@@ -11,20 +11,20 @@ const MESSAGES = [
   "Thanks for scrolling all the way down 👋",
   "Psst… Mani is open to new work ✨",
   "Build passed · 0 bugs (probably) 😄",
-  "Click me — I can hop!",
+  "Click me — I can fly! 🚀",
 ];
-const HOP_LINES = ["Wheee! 🚀", "Boing! 😆", "Again? Okay! 🎉"];
+const HOP_LINES = ["3… 2… 1… liftoff! 🚀", "To the moon! 🌙", "Wheee! I can fly! ✨"];
 
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative z-10 overflow-hidden border-t border-line bg-bg">
+    <footer className="relative z-10 overflow-x-clip border-t border-line bg-bg">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-24 top-1/2 h-[360px] w-[360px] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(124,245,196,.1),transparent)] blur-2xl"
       />
 
-      <div className="relative mx-auto grid max-w-[1240px] items-center gap-x-10 gap-y-6 px-6 py-8 md:grid-cols-[220px_1fr_auto]">
+      <div className="relative mx-auto grid max-w-[1240px] items-center gap-x-10 gap-y-6 px-6 py-8 md:grid-cols-[240px_1fr_auto]">
         <RobotCorner />
 
         {/* middle: a short sign-off */}
@@ -116,16 +116,24 @@ function RobotCorner() {
 
   const onJump = () => {
     setHopLine(HOP_LINES[Math.floor(Math.random() * HOP_LINES.length)]);
-    setTimeout(() => setHopLine(null), 1800);
+    setTimeout(() => setHopLine(null), 2900);
   };
 
   return (
-    <Reveal className="relative mx-auto w-[220px] pt-10">
-      <div className="absolute left-1/2 top-0 z-10 w-max max-w-[240px] -translate-x-1/2 rounded-xl rounded-bl-sm border border-line-3 bg-card-2 px-3 py-1.5 text-xs font-medium text-ink-2 shadow-[0_10px_24px_-10px_rgba(0,0,0,.8)] md:left-[62%] md:translate-x-0">
+    <Reveal className="relative mx-auto -mt-[110px] w-[240px]">
+      <div className="pointer-events-none absolute left-1/2 top-[96px] z-10 w-max max-w-[240px] -translate-x-1/2 rounded-xl rounded-bl-sm border border-line-3 bg-card-2 px-3 py-1.5 text-xs font-medium text-ink-2 shadow-[0_10px_24px_-10px_rgba(0,0,0,.8)] md:left-[62%] md:translate-x-0">
         {typed}
         <span className="caret ml-0.5 text-accent">▍</span>
       </div>
-      <FooterRobot className="block aspect-square w-full cursor-pointer" onJump={onJump} />
+      {/* tall canvas: the empty headroom reaches up over the section above, so the robot can fly high */}
+      <FooterRobot className="block aspect-[2/3] w-full cursor-pointer" onJump={onJump} />
+      {/* same pill as the ID card's "Drag to swing" hint */}
+      <div className="pointer-events-none mx-auto -mt-3 flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full bg-[rgba(10,12,16,.72)] px-3.5 py-[7px] font-mono text-[11px] text-[#f3f0e9]">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-[13px] w-[13px] shrink-0 opacity-75" aria-hidden="true">
+          <path d="M9 9V4.5a1.5 1.5 0 0 1 3 0V12m0-1.5a1.5 1.5 0 0 1 3 0V12m0-.5a1.5 1.5 0 0 1 3 0v3.5a6 6 0 0 1-6 6h-1a6 6 0 0 1-4.6-2.2L4 15.5a1.6 1.6 0 0 1 2.4-2.1L9 16" />
+        </svg>
+        Click me · I can fly
+      </div>
     </Reveal>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { profile, sections } from "@/lib/data";
+import { Logo } from "@/components/ui/logo";
 
 const links = sections.filter((s) => s.id !== "contact");
 
@@ -35,10 +36,8 @@ export function Nav() {
       }`}
     >
       <nav className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-6 py-3.5">
-        <a href="/" onClick={(e) => goTo(e, "top")} className="flex min-h-11 items-center gap-2.5">
-          <span className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[9px] border-[1.5px] border-accent font-mono text-[13px] font-semibold text-accent">
-            MB
-          </span>
+        <a href="/" onClick={(e) => goTo(e, "top")} className="logo-link flex min-h-11 items-center gap-2.5" aria-label={`${profile.name} — home`}>
+          <Logo className="h-11 w-11" />
           <span className="font-script text-[26px] font-bold leading-none text-white">{profile.name}</span>
         </a>
 

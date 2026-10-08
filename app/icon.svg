@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="bg" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2fd3a2"/>
+      <stop offset="1" stop-color="#13917c"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="14" cy="9" r="26" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity=".4"/>
+      <stop offset=".6" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#bg)"/>
+  <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#shine)"/>
+  <path d="M9.5 33V16l6.75 9.2L23 16v17M27 16v17h3a8.5 8.5 0 0 0 0-17z" transform="translate(0 1.4)" fill="none" stroke="#0a1a3a" stroke-opacity=".35" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9.5 33V16l6.75 9.2L23 16v17M27 16v17h3a8.5 8.5 0 0 0 0-17z" fill="none" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M40 4.5Q40.7 8.3 44.5 9 40.7 9.7 40 13.5 39.3 9.7 35.5 9 39.3 8.3 40 4.5z" fill="#fff"/>
+</svg>
