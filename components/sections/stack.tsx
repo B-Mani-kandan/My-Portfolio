@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { techCategories, techStack, type TechCategory } from "@/lib/data";
 import { Eyebrow } from "@/components/sections/services";
-import { TunnelField } from "@/components/three/tunnel-field";
+import { LazyTunnelField as TunnelField } from "@/components/three/lazy";
 
 /** Tiles per row on wide screens — a funnel that narrows toward the bottom. */
 const STACK_ROWS = [10, 8, 6, 4];

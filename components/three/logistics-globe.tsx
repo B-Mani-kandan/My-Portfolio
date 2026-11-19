@@ -19,7 +19,7 @@ const PORTS: [number, number][] = [
 ];
 
 /** Wireframe globe with shipping arcs from Chennai and cargo dots travelling along them. */
-export function LogisticsGlobe() {
+export function LogisticsGlobe({ className = "absolute inset-0 block h-full w-full" }: { className?: string }) {
   const canvasRef = useThreeScene(
     ({ scene }) => {
       const R = 2.1;
@@ -72,5 +72,5 @@ export function LogisticsGlobe() {
     { fov: 40, z: 7.4 }
   );
 
-  return <canvas ref={canvasRef} aria-label="3D globe with shipping routes from Chennai" className="absolute inset-0 block h-full w-full" />;
+  return <canvas ref={canvasRef} aria-label="3D globe with shipping routes from Chennai" className={className} />;
 }

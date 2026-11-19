@@ -20,7 +20,7 @@ export const profile = {
     "I'm Manikandan — a full-stack developer from Tamil Nadu who turns **messy business workflows** into software that feels fast, clear and dependable.",
   aboutBody: [
     "Since 2024 I've been building **logistics, freight and HR platforms** at Invoking Systems — ASP.NET and C# APIs, SQL Server underneath, Angular and React on top. Real teams run their day on what I ship.",
-    "Outside the day job I design and launch websites for real businesses — **three are live today**. I care about the details people feel: quick pages, honest code and screens that just make sense.",
+    "Outside the day job I design and launch websites for real businesses — **five are live today**. I care about the details people feel: quick pages, honest code and screens that just make sense.",
   ],
   currently: { role: "Software Developer", company: "Invoking Systems", since: "Jan 2024" },
   education: {
@@ -32,8 +32,8 @@ export const profile = {
 
 export const stats = [
   { value: "2+", label: "years in production" },
-  { value: "3", label: "live client websites" },
-  { value: "9", label: "projects shipped" },
+  { value: "5", label: "live client websites" },
+  { value: "11", label: "projects shipped" },
   { value: "8.25", label: "B.Tech IT CGPA" },
 ];
 
@@ -74,7 +74,7 @@ export const services: Service[] = [
     tech: ["Angular", "React", "TypeScript", "JavaScript", "Tailwind CSS", "Bootstrap"],
   },
   {
-    num: "04", title: "Websites That Win Clients", badge: "3 live sites", color: COLORS.yellow,
+    num: "04", title: "Websites That Win Clients", badge: "5 live sites", color: COLORS.yellow,
     lead: "Fast, SEO-ready business websites that bring in enquiries — already live for freight and logistics companies.",
     builds: ["Service and landing pages that convert", "Enquiry and quote forms", "SEO, social previews and deployment"],
     detail: "Mobile-first builds with semantic HTML, Open Graph and Twitter cards, optimised images and quick hosting — handed over live and kept maintained.",
@@ -139,60 +139,71 @@ export const techStack: { name: string; icon: string; cat: TechCategory; invert?
   { name: "Vercel", icon: "vercel", cat: "tools", invert: true },
 ];
 
-export type LiveSite = {
+/**
+ * Project screenshots live in /public/work. Each is a full-page capture at 1440px wide —
+ * the card shows the top of it and scrolls through the whole page on hover.
+ * `shotH` is the image's pixel height (width is always 1440). Refresh them with
+ * `node scripts/capture-shots.mjs public/work name=url ...`.
+ */
+export type Shot = { image: string; shotH: number };
+
+export type LiveSite = Shot & {
   num: string; kind: string; name: string; domain: string; url: string; reverse: boolean;
-  desc: string; points: string[];
-  mock: { bg: string; logo: string; logoText: string; line: string; cta: string; ctaInk: string; ink: string; eyebrow: string; headline: string; pills: string[]; blocks: string[] };
+  color: string; desc: string; points: string[];
 };
 
 export const liveSites: LiveSite[] = [
   {
     num: "01", kind: "Freight forwarding website", name: "Zion Forwarders", domain: "zionforwarders.in", url: "https://zionforwarders.in/", reverse: false,
-    desc: "Public website for an international freight forwarder — presenting ocean and air freight, customs clearance, warehousing and end-to-end logistics to customers worldwide.",
-    points: ["Service pages for sea, air, customs & warehousing", "Responsive layout, SEO & social-share metadata", "Built in the brand's deep-blue identity"],
-    mock: {
-      bg: "#0F4C81", logo: "#FFFFFF", logoText: "ZION FORWARDERS", line: "rgba(255,255,255,.28)", cta: "#FFC46B", ctaInk: "#0B2A47", ink: "#FFFFFF",
-      eyebrow: "Global freight partner", headline: "Your trusted logistics partner.", pills: ["Ocean", "Air", "Customs", "Warehousing"],
-      blocks: ["#FFC46B", "#E8EEF5", "#3A7BC0", "#E8EEF5", "#FF8A5C", "#FFC46B", "#3A7BC0", "#FFC46B", "#E8EEF5"],
-    },
+    image: "/work/zion.jpg", shotH: 2895, color: "#2FB8B0",
+    desc: "Public website for an international freight forwarder — ocean and air freight, customs clearance, DGR handling and FCL / LCL shipping, presented with an interactive 3D container ship.",
+    points: ["Interactive 3D container-ship hero", "Service pages for sea, air, customs & warehousing", "Track-shipment entry point, SEO & social metadata"],
   },
   {
-    num: "02", kind: "Global logistics website", name: "TransitSync Global", domain: "transitsyncglobal.com", url: "https://transitsyncglobal.com/", reverse: true,
+    num: "02", kind: "Logistics company website", name: "Argo Worldwide Logistics", domain: "ndlweb.f-studio.in", url: "https://ndlweb.f-studio.in/", reverse: true,
+    image: "/work/argo.jpg", shotH: 3222, color: "#E5262B",
+    desc: "A bold, image-led site for an India · Dubai freight forwarder — one accountable team for ocean, air, land transport, customs clearance and Jebel Ali warehousing.",
+    points: ["Five-service journey with an animated truck preloader", "Layered photo hero with route & mode badges", "Careers, contact and get-a-quote flows"],
+  },
+  {
+    num: "03", kind: "Industrial automation website", name: "Foutema Automation", domain: "foutema.com", url: "http://www.foutema.com/", reverse: false,
+    image: "/work/foutema.jpg", shotH: 3414, color: "#3A5BB0",
+    desc: "Corporate website for Foutema Automation Technology — SMT fixtures, carriers, spares & consumables and custom assembly-line automation for electronics manufacturers.",
+    points: ["Product & services catalogue for SMT lines", "Built in React with animated card hero", "Enquiry flow and full product-range footer"],
+  },
+  {
+    num: "04", kind: "Global logistics website", name: "TransitSync Global", domain: "transitsyncglobal.com", url: "https://transitsyncglobal.com/", reverse: true,
+    image: "/work/transitsync.jpg", shotH: 5200, color: "#F2C94C",
     desc: "A modern site for a global logistics company — smart freight forwarding, supply-chain management and import/export services, positioned as a technology-led operator.",
-    points: ["Services: forwarding, supply chain, import & export", "Mobile-first, SEO-optimised build", "Open Graph & Twitter cards for sharing"],
-    mock: {
-      bg: "#0B1B2E", logo: "#7CD8F5", logoText: "TRANSITSYNC", line: "rgba(124,216,245,.25)", cta: "#13C4A3", ctaInk: "#06241F", ink: "#EAF6FB",
-      eyebrow: "Smart freight forwarding", headline: "Global logistics, in sync.", pills: ["Forwarding", "Supply chain", "Import / Export"],
-      blocks: ["#13C4A3", "#1E3A5C", "#7CD8F5", "#1E3A5C", "#13C4A3", "#2C5A85", "#7CD8F5", "#13C4A3", "#1E3A5C"],
-    },
+    points: ["Ocean, air, heavy-lift & warehousing service pages", "Mobile-first, SEO-optimised build", "Open Graph & Twitter cards for sharing"],
   },
   {
-    // TODO: fill in Prodigy Book's details
-    num: "03", kind: "Business website", name: "Prodigy Book", domain: "prodigybook.in", url: "http://www.prodigybook.in/", reverse: false,
-    desc: "[One or two lines on what Prodigy Book is and who it serves.]",
-    points: ["[Key feature or page you built]", "[Second highlight]", "[Tech used]"],
-    mock: {
-      bg: "#F6F1E7", logo: "#2B1E5C", logoText: "PRODIGY BOOK", line: "rgba(43,30,92,.18)", cta: "#6C4CF5", ctaInk: "#FFFFFF", ink: "#1B1438",
-      eyebrow: "[Tagline]", headline: "[Prodigy Book headline]", pills: ["[Feature]", "[Feature]", "[Feature]"],
-      blocks: ["#6C4CF5", "#E7DFFB", "#FF9B5C", "#E7DFFB", "#6C4CF5", "#FFC46B", "#E7DFFB", "#6C4CF5", "#FF9B5C"],
-    },
+    num: "05", kind: "SaaS product website", name: "Prodigy Book", domain: "prodigybook.in", url: "http://www.prodigybook.in/", reverse: false,
+    image: "/work/prodigybook.jpg", shotH: 2360, color: "#4F6BF5",
+    desc: "Marketing site for Prodigy Book, the HR & attendance platform I built — it walks teams from the problems they have today to a single place to manage their whole workforce.",
+    points: ["Live product dashboard preview in the hero", "Problems → transformation → how-it-works story", "Lead capture into the HRM app"],
   },
 ];
 
-export const enterprise = [
+export type EnterpriseApp = Shot & {
+  title: string; product: string; status: string; statusDone: boolean; year: string; url: string; domain: string;
+  ink: string; desc: string; points: string[]; tags: string[];
+};
+
+export const enterprise: EnterpriseApp[] = [
   {
-    title: "Logistics & Freight Forwarding System", year: "2024 — now", bg: "#0F1A17", ink: COLORS.accent,
-    desc: "Modules for shipment booking, container tracking, billing, documentation and operational workflows — powered by ASP.NET Web APIs.",
-    tags: ["ASP.NET", "C#", "Web API", "SQL Server", "Angular"],
-    kpis: [{ l: "Bookings", v: "Live" }, { l: "Tracking", v: "Live" }, { l: "Billing", v: "Live" }],
-    chart: [40, 55, 48, 70, 62, 80, 58, 74, 88, 66, 92, 78],
+    title: "Logistics ERP", product: "F-Studio ERP", status: "Migrating to .NET 10", statusDone: false, year: "2024 — now",
+    url: "https://dev-fstudio.f-studio.in/", domain: "dev-fstudio.f-studio.in", image: "/work/erp.jpg", shotH: 900, ink: "#FF8A4C",
+    desc: "A freight-forwarding ERP that runs day-to-day operations — re-engineering the legacy application onto .NET 10 with a rebuilt, faster interface.",
+    points: ["Bookings, ocean / air / road / customs jobs", "Documentation, billing & live tracking", "Legacy modules ported to .NET 10 Web APIs"],
+    tags: [".NET 10", "C#", "Web API", "SQL Server", "Angular"],
   },
   {
-    title: "HRM Attendance Management", year: "2024", bg: "#12131F", ink: COLORS.violet,
-    desc: "A complete attendance application — check-ins, leave and reports — with an Angular front end over C# services and tuned SQL Server procedures.",
-    tags: ["Angular", "C#", "SQL Server"],
-    kpis: [{ l: "Check-ins", v: "Daily" }, { l: "Leave", v: "Flow" }, { l: "Reports", v: "Auto" }],
-    chart: [82, 78, 90, 86, 74, 30, 28, 88, 84, 92, 80, 35],
+    title: "HRM & Attendance", product: "Prodigy Book", status: "Completed · in use", statusDone: true, year: "2024 — 2025",
+    url: "http://hrmdev.f-studio.in/login", domain: "hrmdev.f-studio.in", image: "/work/hrm.jpg", shotH: 900, ink: COLORS.violet,
+    desc: "A complete HR platform built end to end — attendance, leave and approvals through to payroll, with payslips calculated straight from attendance.",
+    points: ["Check-ins, WFH, leave & approval workflows", "Payroll, allowances & downloadable payslips", "Employee directory, org chart & dashboards"],
+    tags: ["Angular", "C#", "ASP.NET Web API", "SQL Server"],
   },
 ];
 

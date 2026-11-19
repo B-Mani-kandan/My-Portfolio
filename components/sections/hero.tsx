@@ -1,8 +1,11 @@
 "use client";
 
+import { preload } from "react-dom";
 import { profile } from "@/lib/data";
 
 export function Hero() {
+  // the poster is the first thing on screen — fetch it before anything else
+  preload("/hero/poster.jpg", { as: "image", fetchPriority: "high" });
   return (
     <section
       id="top"
@@ -14,6 +17,7 @@ export function Hero() {
         <video
           className="h-full w-full object-cover object-[62%_32%]"
           src="/hero/Portfolio_Video.mp4"
+          poster="/hero/poster.jpg"
           autoPlay
           muted
           loop
@@ -74,7 +78,7 @@ function CodeCard() {
     <>  name: <span className={s.str}>&quot;{profile.name}&quot;</span>,</>,
     <>  stack: [<span className={s.str}>&quot;C#&quot;</span>, <span className={s.str}>&quot;.NET&quot;</span>, <span className={s.str}>&quot;Angular&quot;</span>, <span className={s.str}>&quot;React&quot;</span>],</>,
     <>  experience: <span className={s.num}>&quot;2+ years&quot;</span>,</>,
-    <>  shipped: <span className={s.num}>9</span>, <span className={s.cmt}>{"// 3 live sites"}</span></>,
+    <>  shipped: <span className={s.num}>11</span>, <span className={s.cmt}>{"// 5 live sites"}</span></>,
     <>  status: <span className={s.str}>&quot;open to work&quot;</span><span className="caret text-accent">▍</span></>,
     <>{"};"}</>,
   ];

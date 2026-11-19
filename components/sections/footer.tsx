@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ArrowUp, ArrowUpRight, Mail, Phone } from "lucide-react";
-import { FooterRobot } from "@/components/three/footer-robot";
+import { LazyFooterRobot as FooterRobot } from "@/components/three/lazy";
 import { GithubIcon, LinkedinIcon } from "@/components/sections/contact";
 import { Reveal, useInView } from "@/components/ui/reveal";
 import { profile } from "@/lib/data";

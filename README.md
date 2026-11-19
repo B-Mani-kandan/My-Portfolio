@@ -92,7 +92,7 @@ Almost everything you'd want to change lives in **one file: [`lib/data.ts`](lib/
 | Nav links / section URLs | `sections` |
 | Colours & fonts | `@theme` in [`app/globals.css`](app/globals.css) |
 | Hero video | Replace `public/hero/Portfolio_Video.mp4` (H.264 MP4, ideally 1080p, under ~10 MB) |
-| Photo & résumé | `public/me.png`, `public/Manikandan_B_Resume.pdf` |
+| Photo & résumé | `public/me.jpg`, `public/Manikandan_B_Resume.pdf` |
 | Contact form key | `WEB3FORMS_KEY` in [`components/sections/contact.tsx`](components/sections/contact.tsx) |
 
 In `profile.aboutLead` / `aboutBody`, wrap a phrase in `**double stars**` to give it the animated highlight.

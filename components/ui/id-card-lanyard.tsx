@@ -424,8 +424,16 @@ export function IDCardLanyard({
       drawClip();
       positionCard();
       updateTiltAndSheen();
-      raf = requestAnimationFrame(loop);
+      raf = onScreen ? requestAnimationFrame(loop) : 0;
     }
+
+    // pause the physics while the card is off-screen — it reads layout every frame
+    let onScreen = true;
+    const vis = new IntersectionObserver(([e]) => {
+      onScreen = e.isIntersecting;
+      if (onScreen && !raf) raf = requestAnimationFrame(loop);
+    }, { rootMargin: "200px" });
+    vis.observe(scene);
 
     const onCardDown = (e: PointerEvent) => {
       if ((e.target as HTMLElement).closest("a")) return;
@@ -484,6 +492,7 @@ export function IDCardLanyard({
 
     return () => {
       cancelAnimationFrame(raf);
+      vis.disconnect();
       ro.disconnect();
       card.removeEventListener("pointerdown", onCardDown);
       card.removeEventListener("keydown", onKey);

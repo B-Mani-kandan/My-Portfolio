@@ -29,7 +29,7 @@ export function About() {
             extraRowLabel="Stack"
             extraRowValue=".NET · Angular"
             site={profile.githubHandle}
-            photoUrl="/me.png"
+            photoUrl="/me.jpg"
             githubUrl={profile.github}
             linkedinUrl={profile.linkedin}
           />

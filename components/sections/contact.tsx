@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { Check, Loader2, Mail, Phone, Send } from "lucide-react";
-import { WaveField } from "@/components/three/wave-field";
+import { LazyWaveField as WaveField } from "@/components/three/lazy";
 import { contactTopics, profile } from "@/lib/data";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
 // Web3Forms access key — public by design: it can only deliver messages to your own inbox.
-const WEB3FORMS_KEY = "d4348448-5612-407e-a3ba-08d929876e1a";
+const WEB3FORMS_KEY = "341b58ae-9d0c-496a-833d-dcdfcbb7c860";
 
 const field =
   "min-h-12 rounded-xl border border-[#222A38] bg-card-2 px-4 py-3.5 text-[15px] font-medium text-ink outline-none transition placeholder:text-faint focus:border-accent focus:bg-[#0F141D]";
@@ -22,18 +22,39 @@ export function Contact() {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
-    const name = String(data.get("name") ?? "").trim();
-    data.append("access_key", WEB3FORMS_KEY);
-    data.append("topic", topic);
-    data.append("subject", `Portfolio: ${topic} — ${name}`);
-    data.append("from_name", "Manikandan B Portfolio");
+    const get = (k: string) => String(data.get(k) ?? "").trim();
+    const name = get("name");
+    const email = get("email");
+    const phone = get("phone");
+    const message = get("message");
+
+    // Keys with readable labels are shown as-is in the Web3Forms email, in this order.
+    const payload: Record<string, string | boolean> = {
+      access_key: WEB3FORMS_KEY,
+      subject: `New portfolio enquiry: ${topic} — ${name}`,
+      from_name: `${name} (via Portfolio)`,
+      replyto: email,
+      Name: name,
+      Email: email,
+      Phone: phone || "Not provided",
+      Topic: topic,
+      Message: message,
+      "Sent from": typeof window !== "undefined" ? window.location.href : "",
+      "Submitted at": new Date().toLocaleString("en-IN", {
+        dateStyle: "medium",
+        timeStyle: "short",
+        timeZone: "Asia/Kolkata",
+      }) + " IST",
+    };
+    if (data.get("botcheck")) payload.botcheck = true;
+
     setStatus("sending");
     setError("");
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { Accept: "application/json" },
-        body: data,
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.success) throw new Error(json.message || "Something went wrong. Please try again.");
@@ -136,6 +157,13 @@ export function Contact() {
                     <input type="email" name="email" required maxLength={200} placeholder="jane@company.com" className={field} autoComplete="email" />
                   </label>
                 </div>
+
+                <label className="flex flex-col gap-2 text-[13px] font-semibold text-muted">
+                  <span>
+                    Phone <span className="font-normal text-faint">(optional)</span>
+                  </span>
+                  <input type="tel" name="phone" maxLength={30} placeholder="+91 98765 43210" className={field} autoComplete="tel" />
+                </label>
 
                 {/* honeypot: hidden from people, bots tick it — Web3Forms drops those */}
                 <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />

@@ -48,15 +48,24 @@ export function BracketCursor() {
     const onDown = () => (ring.dataset.down = "1");
     const onUp = () => (ring.dataset.down = "");
 
+    // only animates while the trail is catching up — idle when the mouse is still
     const tick = () => {
-      raf = requestAnimationFrame(tick);
       trail.x += (pos.x - trail.x) * 0.22;
       trail.y += (pos.y - trail.y) * 0.22;
+      const settled = Math.abs(pos.x - trail.x) < 0.1 && Math.abs(pos.y - trail.y) < 0.1;
+      if (settled) {
+        trail.x = pos.x;
+        trail.y = pos.y;
+      }
       dot.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
       ring.style.transform = `translate3d(${trail.x}px, ${trail.y}px, 0)`;
+      raf = settled ? 0 : requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
+    const wake = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
 
+    window.addEventListener("pointermove", wake, { passive: true });
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerleave", onLeave);
     window.addEventListener("pointerdown", onDown);
@@ -66,6 +75,7 @@ export function BracketCursor() {
       cancelAnimationFrame(raf);
       root.classList.remove("bracket-cursor", "bracket-cursor-on");
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointermove", wake);
       document.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);

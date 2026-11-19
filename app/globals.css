@@ -75,6 +75,23 @@ a {
 .browser3d { transition: transform .7s cubic-bezier(.2,.8,.2,1) }
 .site-row:hover .browser3d { transform: perspective(1600px) rotateX(2deg) rotateY(0deg) translateZ(30px) !important }
 
+/* real-screenshot windows: hover scrolls through the full-page capture, then eases back */
+.shot { box-shadow: 0 50px 100px -30px rgba(0,0,0,.85); transition: transform .7s cubic-bezier(.2,.8,.2,1), box-shadow .5s, border-color .3s }
+.shot:hover, .shot:focus-visible { box-shadow: 0 50px 100px -30px rgba(0,0,0,.85), 0 0 0 1px var(--glow), 0 30px 90px -20px color-mix(in srgb, var(--glow) 45%, transparent) }
+/* only `transform` animates (GPU-composited, no layout) — --shift is how far the page must travel, as % of its own height */
+.shot-track { top: 0; transform: translate3d(0, 0, 0); transition: transform 1s cubic-bezier(.4,0,.2,1); will-change: transform; backface-visibility: hidden }
+.shot[data-scrolls]:hover .shot-track, .shot[data-scrolls]:focus-visible .shot-track {
+  transform: translate3d(0, var(--shift), 0);
+  transition-duration: var(--dur, 4s); transition-timing-function: cubic-bezier(.45,0,.55,1); transition-delay: .25s;
+}
+/* enterprise cards: a flat lift instead of the 3D tilt (the tilt moved the card out from under the pointer and flickered) */
+.lift { transition: transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .5s, border-color .3s }
+.lift:hover, .lift:focus-visible { transform: translate3d(0, -6px, 0); border-color: var(--glow) }
+@media (prefers-reduced-motion: reduce) {
+  .shot-track, .shot[data-scrolls]:hover .shot-track, .shot[data-scrolls]:focus-visible .shot-track { transform: none; transition: none }
+  .lift:hover { transform: none }
+}
+
 
 @media (prefers-reduced-motion: reduce) {
   .floaty, .caret, .dot, .marquee { animation: none }
@@ -105,8 +122,8 @@ html.bracket-cursor-on .bc-layer { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .tunnel-glow { animation: none } }
 
 /* scroll reveal (components/ui/reveal.tsx) */
-.reveal { opacity: 0; translate: 0 28px; filter: blur(6px); transition: opacity .9s ease, translate .9s cubic-bezier(.2,.8,.2,1), filter .9s ease }
-.reveal[data-shown] { opacity: 1; translate: 0 0; filter: none }
+.reveal { opacity: 0; translate: 0 28px; transition: opacity .9s ease, translate .9s cubic-bezier(.2,.8,.2,1) }
+.reveal[data-shown] { opacity: 1; translate: 0 0 }
 /* highlighted phrases: a mint marker sweeps in under the words */
 .hl { color: var(--color-ink); background: linear-gradient(transparent 60%, rgba(124,245,196,.24) 60%) no-repeat; background-size: 0% 100%; transition: background-size 1.1s cubic-bezier(.2,.8,.2,1) .7s }
 .reveal[data-shown] .hl { background-size: 100% 100% }
