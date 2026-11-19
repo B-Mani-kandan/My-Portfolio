@@ -55,7 +55,7 @@ This repo is my personal site: a single-page portfolio with a video hero, scroll
 | 04 | Selected work | Live client websites and enterprise systems |
 | 05 | Process | How I take a feature from brief to production |
 | 06 | Experience | Where I've worked and what I shipped |
-| 07 | Contact | Message form, email, phone and socials |
+| 07 | Contact | Message form, email and socials |
 
 ## 🚀 Run it locally
 

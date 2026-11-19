@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Loader2, Mail, Phone, Send } from "lucide-react";
+import { Check, Loader2, Mail, Send } from "lucide-react";
 import { LazyWaveField as WaveField } from "@/components/three/lazy";
 import { contactTopics, profile } from "@/lib/data";
 
@@ -91,15 +91,6 @@ export function Contact() {
               <span className="flex flex-col">
                 <small className="text-xs text-faint">Email</small>
                 <span className="font-semibold">{profile.email}</span>
-              </span>
-            </a>
-            <a href={profile.phoneHref} className="flex min-h-11 items-center gap-3.5">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#222A38] text-accent">
-                <Phone size={18} />
-              </span>
-              <span className="flex flex-col">
-                <small className="text-xs text-faint">Phone</small>
-                <span className="font-semibold">{profile.phone}</span>
               </span>
             </a>
           </div>

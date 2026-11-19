@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowUp, ArrowUpRight, Mail, Phone } from "lucide-react";
+import { ArrowUp, ArrowUpRight, Mail } from "lucide-react";
 import { LazyFooterRobot as FooterRobot } from "@/components/three/lazy";
 import { GithubIcon, LinkedinIcon } from "@/components/sections/contact";
 import { Reveal, useInView } from "@/components/ui/reveal";
@@ -55,9 +55,6 @@ export function Footer() {
             </Icon>
             <Icon href={`mailto:${profile.email}`} label="Email">
               <Mail size={17} />
-            </Icon>
-            <Icon href={profile.phoneHref} label="Phone">
-              <Phone size={17} />
             </Icon>
           </div>
           <button

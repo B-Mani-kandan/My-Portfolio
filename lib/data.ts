@@ -6,8 +6,6 @@ export const profile = {
   shortRole: "Software Developer",
   location: "Tamil Nadu, India",
   email: "baskarmanikandan48@gmail.com",
-  phone: "+91 63797 63494",
-  phoneHref: "tel:+916379763494",
   github: "https://github.com/B-Mani-kandan",
   githubHandle: "github.com/B-Mani-kandan",
   linkedin: "https://linkedin.com/in/manikandan-33",
